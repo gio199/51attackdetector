@@ -1,0 +1,46 @@
+[build-system]
+requires = ["setuptools>=69,<81", "wheel>=0.43"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "bitcoin-chain-risk-monitor"
+version = "0.3.0"
+description = "Statistically calibrated Bitcoin chain-continuity and double-spend risk monitor"
+readme = "README.md"
+requires-python = ">=3.11"
+authors = [{ name = "Giorgi Mushkudiani" }]
+dependencies = [
+  "requests>=2.31,<3",
+]
+
+[project.optional-dependencies]
+ai = [
+  "openai>=2.0,<3",
+]
+test = [
+  "coverage>=7.5,<8",
+  "pytest>=8,<9",
+]
+
+[project.scripts]
+block-detector = "block_detector.cli:main"
+
+[tool.setuptools.packages.find]
+where = ["."]
+include = ["block_detector*"]
+exclude = ["research*", "tests*", "tmp*"]
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]
+addopts = "-ra --strict-config --strict-markers"
+markers = [
+  "integration: opt-in tests that contact live services",
+]
+
+[tool.coverage.run]
+branch = true
+source = ["block_detector"]
+
+[tool.coverage.report]
+show_missing = true
+skip_covered = true
